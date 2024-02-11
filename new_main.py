@@ -2,6 +2,9 @@ import firebase_admin
 from firebase_admin import credentials, firestore, storage
 import pickle
 import image_text_vectorizer as itv
+import sys
+sys.path.append('gptVectorized')
+from image_and_text_gptoutput import getGPTText
 
 # Firebase initialization
 cred = credentials.Certificate("firebasecredentials.json")
@@ -30,11 +33,6 @@ def download_image_from_storage():
         blob.download_to_filename(local_path)
         return local_path
 
-def getGPTText(image_path, text_input):
-    # Implement your GPT-based processing here
-    # This is a placeholder for your actual implementation
-    return "Processed GPT text based on image and input text"
-
 def main():
     # Load the vectorized images
     product_list_aritzia = load_product_list('product_list_aritzia.pkl')
@@ -56,10 +54,13 @@ def main():
     # Find closest images
     closest_images = itv.find_closest_images(all_products, gpt_text_vector)
 
-    # Print URLs of closest images
-    print("URLs of closest matching images:")
+    # Save URLs of closest images to Firestore
+    db = firestore.client()
+    urls_collection = db.collection('matchedImageUrls')
     for image_url, _ in closest_images:
-        print(image_url)
+        urls_collection.add({'url': image_url})
+
+    print("URLs of closest matching images have been saved to Firestore")
 
 if __name__ == "__main__":
     main()
