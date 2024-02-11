@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop'd Website</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Add Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="static-side">
+            <img src="shopping.png" alt="Shopping Bags" class="logo">
+            <h1 style="padding-bottom: 0;" class="title">shop'd</h1>
+            <p style="padding-top: 0;" class="subtitle">the three step process</p>
+        </div>
+        <div class="dynamic-side">
+            <div class="card-container">
+                <!-- Pre-made cards -->
+                <div class="card" id="card1"></div>
+                <div class="card" id="card2"></div>
+                <div class="card" id="card3"></div>
+                <div class="card" id="card4"></div>
+                <div class="card" id="card5"></div>
+                <div class="card" id="card6"></div>
+                <div class="card" id="card7"></div>
+                <div class="card" id="card8"></div>
+                <div class="card" id="card9"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyCzFQYZuJQZq5gDV071dlyTlaYCCtEA3vQ",
+            authDomain: "shop-d-ea02c.firebaseapp.com",
+            projectId: "shop-d-ea02c",
+            storageBucket: "shop-d-ea02c.appspot.com",
+            messagingSenderId: "387923231997",
+            appId: "1:387923231997:web:e15fc85c44fa3a5cc72a94"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        function fetchImageUrls() {
+            var db = firebase.firestore();
+            db.collection('matchedImageUrls').get().then((querySnapshot) => {
+                var i = 1; // Card counter
+                querySnapshot.forEach((doc) => {
+                    var card = document.getElementById('card' + i);
+                    if (card) {
+                        // Assuming you want to set the URL as a link on the card
+                        card.innerHTML = '<a href="' + doc.data().url + '" target="_blank">Visit Website ' + i + '</a>';
+                        i++;
+                    }
+                });
+            });
+        }
+
+        fetchImageUrls();
+    </script>
+</body>
+</html>
