@@ -7,7 +7,7 @@ sys.path.append('gptVectorized')
 from image_and_text_gptoutput import getGPTText
 
 # Firebase initialization
-cred = credentials.Certificate("firebasecredentials.json")
+cred = credentials.Certificate("firebasecred.json")
 firebase_admin.initialize_app(cred, {
     'storageBucket': 'shop-d-ea02c.appspot.com'
 })
