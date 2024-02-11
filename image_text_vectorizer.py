@@ -30,7 +30,7 @@ def process_directory(directory_path):
     return image_vectors
 
 # Function to find the closest images to the text
-def find_closest_images(image_vectors, text_vector, n=5):
+def find_closest_images(image_vectors, text_vector, n=10):
     # Calculate cosine similarity
     similarities = {image_name: torch.nn.functional.cosine_similarity(text_vector, image_vector).item()
                     for image_name, image_vector in image_vectors.items()}
