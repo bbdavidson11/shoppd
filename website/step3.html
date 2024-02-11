@@ -49,10 +49,28 @@
                 var textInput = document.getElementById("searchInputPrompt").value;
                 if(textInput) {
                     // Upload text to Firebase Database
-                    var databaseRef = firebase.database().ref("userTextInputs").push();
-                    databaseRef.set({ text: textInput });
-                    alert('Text submitted!');
-                    // Redirect to another page or show a success message
+                    var databaseRef = firebase.firestore().collection("userTextInputs").doc();
+                    databaseRef.set({ text: textInput }).then(() => {
+                        alert('Text submitted!');
+                        // Send POST request to Flask server
+                        fetch('http://localhost:5000/run-main', { 
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({prompt: textInput})
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Success:', data);
+                            // Redirect or show a message upon successful backend script execution
+                        })
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+                    }).catch((error) => {
+                        console.error('Error writing document: ', error);
+                    });
                 } else {
                     alert('Please enter some text!');
                 }
