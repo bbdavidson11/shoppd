@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop'd Website</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyCzFQYZuJQZq5gDV071dlyTlaYCCtEA3vQ",
+            authDomain: "shop-d-ea02c.firebaseapp.com",
+            projectId: "shop-d-ea02c",
+            storageBucket: "shop-d-ea02c.appspot.com",
+            messagingSenderId: "387923231997",
+            appId: "1:387923231997:web:e15fc85c44fa3a5cc72a94",
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="static-side">
+            <img src="shopping.png" alt="Shopping Bags" class="logo">
+            <h1 style="padding-bottom: 0;" class="title">shop'd</h1>
+            <p style="padding-top: 0;" class="subtitle">the three step process</p>
+        </div>
+        <div class="dynamic-side">
+            <div class="step step-one">
+            <h2 class="step_one">STEP ONE:</h2>
+            <h1 class="upload">upload</h1>
+                <p class="text">upload a vision board of your choice!</p>
+                <div class="upload-container">
+                    <!-- Hidden file input to handle file selection -->
+                    <input type="file" id="fileInput" style="display: none;" />
+                    <!-- Button that the user interacts with -->
+                    <button id="uploadBtn" class="button1">Upload Board</button>
+                    <!-- Additional text below the button -->
+                    <p class="alternative-option">or paste a file or URL</p>
+                </div>
+                
+            <!-- Additional steps would go here -->
+        </div>
+
+    </div>
+    <script>
+        document.getElementById('uploadBtn').addEventListener('click', function() {
+            document.getElementById('fileInput').click();
+        });
+    
+        document.getElementById('fileInput').addEventListener('change', function() {
+            var file = this.files[0];
+            if (file) {
+                // Upload file to Firebase Storage
+                var storageRef = firebase.storage().ref("uploads/" + file.name);
+                storageRef.put(file).then(function(snapshot) {
+                    console.log("Uploaded a file!");
+                    window.location.href = 'step2.html';
+                });
+            }
+        });
+    </script>
+    
+        
+</body>
+</html>

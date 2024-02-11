@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop'd Website</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="static-side">
+            <img src="shopping.png" alt="Shopping Bags" class="logo">
+            <h1 style="padding-bottom: 0;" class="title">shop'd</h1>
+            <p style="padding-top: 0;" class="subtitle">the three step process</p>
+        </div>
+        <div class="dynamic-side">
+            <div class="step step-one">
+                <h2 class="step_one">STEP TWO:</h2>
+                <h1 class="upload">search</h1>
+                <p class="text">search for where you want to shop!</p>
+                
+                    <div class="search-bar-container">
+                       
+                        <input type="text" id="searchInput" placeholder="ex. zara.com" />
+                      
+                    </div>
+                    <p class="text-1"> or choose from </p>
+                    <div class="brand-container">
+                        <div class="brand-option">
+                            <img src="a.svg" alt="LACOSTE" />
+                          <p>Aritzia</p>
+                        </div>
+                        <div class="brand-option">
+                          <img src="lacoste.png" alt="LACOSTE" />
+                          <p>Lacoste</p>
+                        </div>
+                      </div>
+                      
+                      
+             
+            </div>
+            <!-- Additional steps would go here -->
+        </div>
+
+        
+        
+
+    </div>
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event listener for Aritzia option
+            var aritziaOption = document.querySelector('.brand-option img[alt="ARITZIA"]');
+            if (aritziaOption) {
+                aritziaOption.parentNode.addEventListener('click', function() {
+                    window.location.href = 'step3.html';
+                });
+            }
+            
+            // Event listener for Lacoste option
+            var lacosteOption = document.querySelector('.brand-option img[alt="LACOSTE"]');
+            if (lacosteOption) {
+                lacosteOption.parentNode.addEventListener('click', function() {
+                    window.location.href = 'step3.html';
+                });
+            }
+        });
+    </script>
+</body>
+</html>

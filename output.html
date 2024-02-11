@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop'd Website</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Add Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
+    <style>
+        /* Your CSS styles here */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="static-side">
+            <img src="shopping.png" alt="Shopping Bags" class="logo">
+            <h1 style="padding-bottom: 0;" class="title">shop'd</h1>
+            <p style="padding-top: 0;" class="subtitle">the three step process</p>
+        </div>
+        <div class="dynamic-side">
+            <div class="card-container">
+                <!-- Pre-made cards with hardcoded URLs -->
+                <!-- First row -->
+                <a href="https://www.aritzia.com/us/en/product/utility-pocketless-shirt/115421.html?dwvar_115421_color=1275" target="_blank" class="card" id="card1">
+                    <div class="card-image" style="justify-content: center">
+                        <img src="https://aritzia.scene7.com/is/image/Aritzia/medium/s24_01_a02_115421_1275_on_a.jpg" alt="Image 1">
+                    </div>
+                    <div class="card-content">
+                    </div>
+                </a>
+            
+                <a href="https://www.aritzia.com/us/en/product/new-essential-relaxed-poplin-shirt/112341.html?dwvar_112341_color=1275" target="_blank" class="card" id="card2">
+                    <div class="card-image">
+                        <img src="https://aritzia.scene7.com/is/image/Aritzia/medium/s24_01_a02_112341_1275_on_a.jpg" alt="Image 2">
+                    </div>
+                    <div class="card-content">
+                    </div>
+                </a>
+            
+                <a href="https://www.aritzia.com/us/en/product/dottie-shirt/106621.html?dwvar_106621_color=1275" target="_blank" class="card" id="card3">
+                    <div class="card-image">
+                        <img src="https://aritzia.scene7.com/is/image/Aritzia/medium/s24_01_a02_106621_1275_on_a.jpg" alt="Image 3">
+                    </div>
+                    <div class="card-content">
+                    </div>
+                </a>
+            
+                <a href="https://www.aritzia.com/us/en/product/collective-shirt/115435.html?dwvar_115435_color=15104" target="_blank" class="card" id="card4">
+                    <div class="card-image">
+                        <img src="https://aritzia.scene7.com/is/image/Aritzia/medium/s24_01_a02_115435_15104_on_a.jpg" alt="Image 4">
+                    </div>
+                    <div class="card-content">
+                    </div>
+                </a>
+            
+                <a href="https://www.aritzia.com/us/en/product/archive-shirt/101209.html?dwvar_101209_color=1275" target="_blank" class="card" id="card5">
+                    <div class="card-image">
+                        <img src="https://aritzia.scene7.com/is/image/Aritzia/medium/s24_01_a02_101209_1275_on_a.jpg" alt="Image 5">
+                    </div>
+                    <div class="card-content">
+                    </div>
+                </a>
+            
+                <a href="https://www.aritzia.com/us/en/product/archive-shirt/116625.html?dwvar_116625_color=32269" target="_blank" class="card" id="card6">
+                    <div class="card-image">
+                        <img src="https://aritzia.scene7.com/is/image/Aritzia/medium/s24_01_a02_116625_32269_on_a.jpg" alt="Image 6">
+                    </div>
+                    <div class="card-content">
+                    </div>
+                </a>
+            
+                <a href="https://www.aritzia.com/us/en/product/professor-blouse/107714.html?dwvar_107714_color=15104" target="_blank" class="card" id="card7">
+                    <div class="card-image">
+                        <img src="https://aritzia.scene7.com/is/image/Aritzia/medium/f23_01_a02_107714_15104_on_a.jpg" alt="Image 7">
+                    </div>
+                    <div class="card-content">
+                    </div>
+                </a>
+            
+                <a href="https://www.aritzia.com/us/en/product/interview-blouse/110638.html?dwvar_110638_color=15104" target="_blank" class="card" id="card8">
+                    <div class="card-image">
+                        <img src="https://aritzia.scene7.com/is/image/Aritzia/large/s24_01_a02_110638_15104_on_a.jpg" alt="Image 8">
+                    </div>
+                    <div class="card-content">
+                    </div>
+                </a>
+            
+                <a href="https://www.aritzia.com/us/en/product/new-essential-classic-poplin-shirt/113869.html?dwvar_113869_color=1275" target="_blank" class="card" id="card9">
+                    <div class="card-image">
+                        <img src="https://aritzia.scene7.com/is/image/Aritzia/large/s24_01_a02_113869_1275_off_a.jpg" alt="Image 9">
+                    </div>
+                    <div class="card-content">
+                    </div>
+                </a>
+            </div>
+            </div>
+        </div>
+        <div class="dynamic-side">
+            <div id="urlPreviewContainer" class="card-container">
+                <!-- URL previews will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+    </script>
+</body>
+</html>
