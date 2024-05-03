@@ -49,9 +49,12 @@
     <script>
         document.getElementById('uploadBtn').addEventListener('click', function() {
             document.getElementById('fileInput').click();
+            
         });
+
     
         document.getElementById('fileInput').addEventListener('change', function() {
+            console.log("file has been selected");
             var file = this.files[0];
             if (file) {
                 var storageRef = firebase.storage().ref("uploads/" + file.name);
@@ -61,6 +64,17 @@
                     // Observe state change events such as progress, pause, and resume
                     var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                     console.log('Upload is ' + progress + '% done');
+                    
+
+                    function getRate() { // Function definition moved here
+                        if (snapshot.bytesTransferred < snapshot.totalBytes) {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            console.log('Upload is ' + progress + '% done');
+                        }
+                    }
+
+                    myInterval = setInterval(getRate, 10000);
+
                 }, function(error) {
                     // Handle unsuccessful uploads
                     console.error('Upload failed:', error);
@@ -72,6 +86,7 @@
                 });
             }
         });
+
     </script>
     
         
