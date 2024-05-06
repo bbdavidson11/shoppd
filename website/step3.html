@@ -47,22 +47,32 @@
         </div>
         <script>
             document.getElementById('uploadBtn').addEventListener('click', function() {
+
+                if (localStorage.getItem("uid") === null) {
+                    window.location.href = 'index.html';
+                } else {
+                    var uid = localStorage.getItem("uid");
+                    console.log(uid);
+                }
+
                 var textInput = document.getElementById("searchInputPrompt").value;
                 if(textInput) {
                     // Upload text to Firebase Database
-                    var uid = sessionStorage.getItem("uid");
+                    var uid = localStorage.getItem("uid");
                     var databaseRef = firebase.firestore().collection("userTextInputs").doc(uid);
                     databaseRef.set({ text: textInput }).then(() => {
                         alert('Text submitted!');
                         // Send POST request to Flask server
-                        fetch('http://localhost:5000/run-main', { 
+                        fetch('http://127.0.0.1:5000/run-main', { 
                             method: 'POST',
                             headers: {
+                                'Accept': 'application/json',
                                 'Content-Type': 'application/json',
+                                'Access-Control-Allow-Origin' : '*',
                             },
-                            body: JSON.stringify({prompt: textInput})
+                            body: JSON.stringify({id: uid})
                         })
-                        .then(response => response.json())
+                        .then(res  => res.json())
                         .then(data => {
                             console.log('Success:', data);
                             // Redirect or show a message upon successful backend script execution
