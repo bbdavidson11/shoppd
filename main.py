@@ -4,6 +4,7 @@ import pickle
 import image_text_vectorizer as itv
 import sys
 sys.path.append('gptVectorized')
+from image_and_text_gptoutput import getGPTText
 
 class Product:
     def __init__(self, image_url, image_vector):
