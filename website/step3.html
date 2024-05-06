@@ -50,7 +50,8 @@
                 var textInput = document.getElementById("searchInputPrompt").value;
                 if(textInput) {
                     // Upload text to Firebase Database
-                    var databaseRef = firebase.firestore().collection("userTextInputs").doc();
+                    var uid = sessionStorage.getItem("uid");
+                    var databaseRef = firebase.firestore().collection("userTextInputs").doc(uid);
                     databaseRef.set({ text: textInput }).then(() => {
                         alert('Text submitted!');
                         // Send POST request to Flask server

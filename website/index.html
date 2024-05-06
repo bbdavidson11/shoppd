@@ -8,6 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-storage.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-firestore.js"></script>
     <script>
         var firebaseConfig = {
             apiKey: "AIzaSyCzFQYZuJQZq5gDV071dlyTlaYCCtEA3vQ",
@@ -55,9 +56,32 @@
     
         document.getElementById('fileInput').addEventListener('change', function() {
             console.log("file has been selected");
+
+            // we'll make a random uid using the current time and a random number
+            var currentDate = new Date();
+            var currentDateTime = currentDate.toLocaleString();
+
+            if (localStorage.getItem("uid") === null) {
+                var rand = Math.random();
+                var currID = currentDate + rand;
+                localStorage.setItem("uid", currID)
+                console.log(currID);
+            } else {
+                // simply clears what's currently there for the image and text
+                var currID = localStorage.getItem("uid");
+                console.log(currID)
+
+                var storageRef = firebase.storage().ref("uploads/" + currID);
+                storageRef.remove;
+
+                var databaseRef = firebase.firestore().collection("userTextInputs").doc(currID);
+                databaseRef.remove;
+            }
+
             var file = this.files[0];
             if (file) {
-                var storageRef = firebase.storage().ref("uploads/" + file.name);
+                var currID = localStorage.getItem("uid");
+                var storageRef = firebase.storage().ref("uploads/" + currID + "/" + "currImage");
                 var uploadTask = storageRef.put(file);
     
                 uploadTask.on('state_changed', function(snapshot) {
