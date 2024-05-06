@@ -1,5 +1,6 @@
 import torch
 import clip
+# note, install clip using the following: 'pip install git+https://github.com/openai/CLIP.git'
 from PIL import Image
 import os
 import numpy as np
@@ -41,7 +42,7 @@ def find_closest_images(image_vectors, text_vector, n=10):
 
 # Example usage
 if __name__ == "__main__":
-    directory_path = "path/to/your/directory"  # Replace with your image directory
+    directory_path = "F:\Shoppd Project\shoppd\screenshots_aritzia"  # Replace with your image directory
     vectors = process_directory(directory_path)
     
     # Example text input
