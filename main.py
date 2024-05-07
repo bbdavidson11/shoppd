@@ -3,6 +3,7 @@ from firebase_admin import credentials, firestore, storage
 import pickle
 import image_text_vectorizer as itv
 import sys
+import os
 sys.path.append('gptVectorized')
 from gptVectorized.image_and_text_gptoutput import getGPTText
 
@@ -24,21 +25,38 @@ def load_product_list(filename):
 def get_image_vectors_from_products(product_list):
     return {product.image_url: product.image_vector for product in product_list}
 
-def fetch_text_from_firestore():
+def fetch_text_from_firestore(userPath):
     db = firestore.client()
-    texts = db.collection('userTextInputs').get()
-    for text in texts:
-        return text.to_dict()['text']
+    text = db.collection('userTextInputs').document(userPath).get()
 
-def download_image_from_storage():
+    # we're basically retrieving the user's input text which should be the value under "text"
+    # if we don't get anything, we'll just return "" which we're assuming the user just skipped this step
+    if text.exists:
+        data = text.to_dict()
+        key = "text"
+        if key in data:
+            return data[key]
+        else:
+            return ""
+    else:
+        return ""
+
+def download_image_from_storage(userPath):
     bucket = storage.bucket()
-    blobs = bucket.list_blobs(prefix="uploads/")
+    firebasePath = "uploads/" + userPath
+    blobs = bucket.list_blobs(prefix=firebasePath)
+
+    # checks if folder exists
+    if not os.path.exists("downloaded_images"):
+        os.makedirs("downloaded_images")
+
     for blob in blobs:
         local_path = f"downloaded_images/{blob.name}"
+        os.chmod(local_path, 755)
         blob.download_to_filename(local_path)
         return local_path
 
-def main():
+def main(userPath):
     # Load the vectorized images
     product_list_aritzia = load_product_list('product_list_aritzia.pkl')
     product_list_lacoste = load_product_list('product_list_lacoste.pkl')
@@ -47,8 +65,9 @@ def main():
                     **get_image_vectors_from_products(product_list_lacoste)}
 
     # Fetch text from Firebase and download the latest image
-    text_from_firebase = fetch_text_from_firestore()
-    image_from_firebase = download_image_from_storage()
+    text_from_firebase = fetch_text_from_firestore(userPath)
+    print(text_from_firebase)
+    image_from_firebase = download_image_from_storage(userPath)
 
     # Process the fetched text and downloaded image using GPT
     gpt_text = getGPTText(image_from_firebase, text_from_firebase)
@@ -68,4 +87,4 @@ def main():
     print("URLs of closest matching images have been saved to Firestore")
 
 if __name__ == "__main__":
-    main()
+    main('testfolder')
