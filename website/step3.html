@@ -76,7 +76,8 @@
                         .then(data => {
                             console.log('Success:', data);
                             // Redirect or show a message upon successful backend script execution
-                            alert('this part reached');
+                            localStorage.setItem("result", JSON.stringify(data));
+                            window.location.href = "output.html"
                         })
                         .catch((error) => {
                             console.error('Error:', error);

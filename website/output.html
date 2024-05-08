@@ -42,21 +42,40 @@
             appId: "1:387923231997:web:e15fc85c44fa3a5cc72a94"
         };
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        // firebase.initializeApp(firebaseConfig);
+
+        // function fetchImageUrls() {
+        //     db.collection('matchedImageUrls').get().then((querySnapshot) => {
+        //         var i = 1; // Card counter
+        //         querySnapshot.forEach((doc) => {
+        //             var card = document.getElementById('card' + i);
+        //             if (card) {
+        //                 // Assuming you want to set the URL as a link on the card
+        //                 card.innerHTML = '<a href="' + doc.data().url + '" target="_blank">Visit Website ' + i + '</a>';
+        //                 i++;
+        //             }
+        //         });
+        //     });
+        // }
 
         function fetchImageUrls() {
-            var db = firebase.firestore();
-            db.collection('matchedImageUrls').get().then((querySnapshot) => {
-                var i = 1; // Card counter
-                querySnapshot.forEach((doc) => {
-                    var card = document.getElementById('card' + i);
-                    if (card) {
-                        // Assuming you want to set the URL as a link on the card
-                        card.innerHTML = '<a href="' + doc.data().url + '" target="_blank">Visit Website ' + i + '</a>';
-                        i++;
-                    }
-                });
-            });
+            const fetchedResult = localStorage.getItem("result");
+            const result = JSON.parse(fetchedResult);
+
+            const size = Object.keys(result).length;
+
+            var i = 1;
+
+            for (let key in result) {
+                var card = document.getElementById('card' + i);
+                if (card) {
+                    // Assuming you want to set the URL as a link on the card
+                    card.innerHTML = "<button type=\"button\" class=\"match-buttons\" onclick=\"document.location.href = '" + result['url' + i] + "'\" > view match " + i + "</button>";
+                    i++;
+                }
+            }
+
+            console.log(result);
         }
 
         fetchImageUrls();

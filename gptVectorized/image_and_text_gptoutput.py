@@ -1,18 +1,16 @@
-import base64
 import requests
 import os
-import cv2
+from dotenv import load_dotenv
 
 # OpenAI API Key
-api_key = "sk-proj-ZRm3qpHoJld6jFjfugksT3BlbkFJMwazOGQarUY3rZ9Xg1eL"
+load_dotenv()
+api_key = os.environ['gptAPI']
 
 # Function to encode the image
-def encode_image(image_path):
-    if isinstance(image_path, str):
-        with open(image_path, "rb") as image_file:
-            return base64.b64encode(image_file.read()).decode('utf-8')
-    else:
-        return base64.b64encode(image_path).decode('utf-8')     # Encode the byte buffer as base64
+# haven't added code to debug yet
+def encode_image(image_path, debug=False):
+    # I changed the function so that image is already in encoded in base64 - too lazy to refactor this tho
+    return image_path
 
 def getGPTText(image_from_firebase, text_from_firebase):
     # Encoding the image
@@ -52,6 +50,8 @@ def getGPTText(image_from_firebase, text_from_firebase):
 
     # Make the API request
     response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
+
+    print("GPT RESPONSE: \n" + str(response))
 
     response = response.json()
 
