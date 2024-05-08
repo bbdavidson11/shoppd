@@ -1,0 +1,12 @@
+will need to install the following:
+
+firebase
+firebase_admin
+numpy
+pandas
+flask-cors
+flask
+git+https://github.com/openai/CLIP.git
+pillow
+CLIP
+torch

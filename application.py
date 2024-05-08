@@ -4,12 +4,11 @@ import json
 import flask_cors
 import main  # Import your main.py
 
-app = Flask(__name__)
+applcation = Flask(__name__)
 # CORS(app)  # Enable CORS for all routes
-CORS(app, origins=['http://127.0.0.1:5500/website/step3.html'])
+CORS(applcation, origins=['*'])
 
-@app.route('/run-main', methods=['GET', 'POST'])
-@cross_origin(origin='http://127.0.0.1:5500/website/step3.html')
+@applcation.route('/run-main', methods=['GET', 'POST'])
 def run_main():
     data = request.json
     userPath = data["id"]
@@ -38,6 +37,6 @@ class Product:
         self.image_vector = image_vector
 
 if __name__ == '__main__':
-    app.run(debug=False, port=5000)
+    applcation.run(debug=False, port=5000)
 
 

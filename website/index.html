@@ -60,6 +60,7 @@
             // we'll make a random uid using the current time and a random number
             var currentDate = new Date();
             var currentDateTime = currentDate.toLocaleString();
+            var formattedDateTime = currentDate.toISOString().replace(/[:.]/g, '');
 
             if (localStorage.getItem("uid") === null) {
                 var rand = Math.random();
@@ -71,8 +72,10 @@
                 var currID = localStorage.getItem("uid");
                 console.log(currID)
 
-                var storageRef = firebase.storage().ref("uploads/" + currID);
-                storageRef.remove;
+                var storage = firebase.storage();
+                var folderRef = storage.ref('uploads/' + currID);
+
+                folderRef.delete();
 
                 var databaseRef = firebase.firestore().collection("userTextInputs").doc(currID);
                 databaseRef.remove;
@@ -96,8 +99,6 @@
                             console.log('Upload is ' + progress + '% done');
                         }
                     }
-
-                    myInterval = setInterval(getRate, 10000);
 
                 }, function(error) {
                     // Handle unsuccessful uploads
