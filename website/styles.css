@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'Avenir';
-    src: local('Avenir'), url('path-to-your-avenir-font-files.woff') format('woff');
+    /* src: local('Avenir'), url('path-to-your-avenir-font-files.woff') format('woff'); */
     /* Add more sources as needed for different font weights or styles */
 }
 
@@ -197,7 +197,7 @@ button:hover {
   
   @font-face {
     font-family: 'Avenir';
-    src: local('Avenir'), url('path-to-your-avenir-font-files.woff') format('woff');
+    /* src: local('Avenir'), url('path-to-your-avenir-font-files.woff') format('woff'); */
     /* Add more sources as needed for different font weights or styles */
 }
 

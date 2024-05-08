@@ -17,14 +17,20 @@ def run_main():
     # flash("You are successfully login into the Flask Application")
     # Assuming the data contains the necessary information
     # You can modify main.py to accept parameters as needed
-    main.main(userPath)  # Execute the main function
+    results = main.main(userPath)  # Execute the main function
+
+    print(" AT FLASK RESULT: ")
+
+    print(results)
 
     data = { 
             "status" : "success",
             "message" : "main.py executed",
-        } 
+        }
+    
+    result = jsonify(results)
 
-    return jsonify(data)
+    return jsonify(results)
 
 class Product:
     def __init__(self, image_url, image_vector):
@@ -32,6 +38,6 @@ class Product:
         self.image_vector = image_vector
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=False, port=5000)
 
 

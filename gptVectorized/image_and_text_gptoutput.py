@@ -1,13 +1,18 @@
 import base64
 import requests
+import os
+import cv2
 
 # OpenAI API Key
-api_key = "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"
+api_key = "sk-proj-ZRm3qpHoJld6jFjfugksT3BlbkFJMwazOGQarUY3rZ9Xg1eL"
 
 # Function to encode the image
 def encode_image(image_path):
-    with open(image_path, "rb") as image_file:
-        return base64.b64encode(image_file.read()).decode('utf-8')
+    if isinstance(image_path, str):
+        with open(image_path, "rb") as image_file:
+            return base64.b64encode(image_file.read()).decode('utf-8')
+    else:
+        return base64.b64encode(image_path).decode('utf-8')     # Encode the byte buffer as base64
 
 def getGPTText(image_from_firebase, text_from_firebase):
     # Encoding the image
@@ -20,7 +25,7 @@ def getGPTText(image_from_firebase, text_from_firebase):
     }
 
     # Additional text to be added to the payload
-    additional_text = "Describe the overall aesthetic of this vision board in two succinct sentences. " + text_from_firebase
+    additional_text = "In exactly 2 sentences and less than 100 characters, describe the specific clothing as if you were describing it to a shop keeper: " + text_from_firebase
 
     # Construct the payload
     payload = {
@@ -48,7 +53,9 @@ def getGPTText(image_from_firebase, text_from_firebase):
     # Make the API request
     response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
 
+    response = response.json()
+
     # Return the GPT response
-    return response.json()
+    return response['choices'][0]['message']['content']
 
 

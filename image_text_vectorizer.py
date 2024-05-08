@@ -19,6 +19,7 @@ def generate_vector(image_path):
 def generate_text_vector(text):
     with torch.no_grad():
         text_features = model.encode_text(clip.tokenize(text))
+        print("Shape of Text Vector from generated text:", text_features.shape)
     return text_features
 
 # Function to process all images in the directory and return their vectors
@@ -32,6 +33,8 @@ def process_directory(directory_path):
 
 # Function to find the closest images to the text
 def find_closest_images(image_vectors, text_vector, n=10):
+    print("Shape of text vector:", text_vector.shape)
+    # print("Shape of image vector:", image_vectors.shape)
     # Calculate cosine similarity
     similarities = {image_name: torch.nn.functional.cosine_similarity(text_vector, image_vector).item()
                     for image_name, image_vector in image_vectors.items()}
@@ -44,9 +47,11 @@ def find_closest_images(image_vectors, text_vector, n=10):
 if __name__ == "__main__":
     directory_path = "F:\Shoppd Project\shoppd\screenshots_aritzia"  # Replace with your image directory
     vectors = process_directory(directory_path)
+
+    print(vectors)
     
     # Example text input
-    sample_text = "A picture of a dog"  # Replace with your text input
+    sample_text = "green pair of pants"  # Replace with your text input
     text_vector = generate_text_vector(sample_text)
     
     # Find and print the 5 most similar images to the text input

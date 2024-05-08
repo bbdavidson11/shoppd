@@ -72,10 +72,11 @@
                             },
                             body: JSON.stringify({id: uid})
                         })
-                        .then(res  => res.json())
+                        .then(response  => response.json())
                         .then(data => {
                             console.log('Success:', data);
                             // Redirect or show a message upon successful backend script execution
+                            alert('this part reached');
                         })
                         .catch((error) => {
                             console.error('Error:', error);

@@ -81,7 +81,7 @@
             var file = this.files[0];
             if (file) {
                 var currID = localStorage.getItem("uid");
-                var storageRef = firebase.storage().ref("uploads/" + currID + "/" + "currImage");
+                var storageRef = firebase.storage().ref("uploads/" + currID + "/" + file.name);
                 var uploadTask = storageRef.put(file);
     
                 uploadTask.on('state_changed', function(snapshot) {

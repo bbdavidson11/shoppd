@@ -4,6 +4,10 @@ import pickle
 import image_text_vectorizer as itv
 import sys
 import os
+import numpy as np
+import cv2
+from PIL import Image
+from io import BytesIO
 sys.path.append('gptVectorized')
 from gptVectorized.image_and_text_gptoutput import getGPTText
 
@@ -43,48 +47,117 @@ def fetch_text_from_firestore(userPath):
 
 def download_image_from_storage(userPath):
     bucket = storage.bucket()
-    firebasePath = "uploads/" + userPath
+    firebasePath = "uploads/" + userPath 
     blobs = bucket.list_blobs(prefix=firebasePath)
 
+    blob = bucket.blob(firebasePath)
+
     # checks if folder exists
+    # we'll download the image here if needed to (you will have to uncomment some items below)
     if not os.path.exists("downloaded_images"):
         os.makedirs("downloaded_images")
 
+    # myImage = bucket.get_blob(firebasePath)
+    # downloadUrl = blob.generate_signed_url(10000)
+
+    # blob.download_to_filename("downloaded_images/currImage2.webp")
+    # print(downloadUrl)
+
+    # blob.download_to_file
+
     for blob in blobs:
-        local_path = f"downloaded_images/{blob.name}"
-        os.chmod(local_path, 755)
-        blob.download_to_filename(local_path)
-        return local_path
+        # Check if blob is folder - then skip if it is
+        if blob.name.endswith("/"):
+             continue
+
+        # uncomment to view the image as a pop-up
+        # cv2.imshow('image', img)
+        # cv2.waitKey(0)
+
+        # parsed path to get name + extension of file iif needed
+        downloadName = os.path.join("downloaded_images", blob.name.split("/")[2])
+        extension = blob.name.split("/")[2].split('.')[1]
+
+        print("extension: " + extension)
+
+        if extension == "webp":
+            image_bytes = blob.download_as_string()
+
+            # Load the WebP image using Pillow
+            image = Image.open(BytesIO(image_bytes))
+
+            # Convert the image to RGB format if needed
+            if image.mode != 'RGB':
+                image = image.convert('RGB')
+
+            # Save the image to a byte buffer in WebP format
+            buffer = BytesIO()
+            image.save(buffer, format='WebP')
+            buffer.seek(0)
+            return buffer
+
+        else:
+            # download image as array of bytes
+            arr = np.frombuffer(blob.download_as_string(), np.uint8)
+            img = cv2.imdecode(arr, cv2.COLOR_BGR2BGR555) #gets the image
+            _, buffer = cv2.imencode(extension, img)     # Convert the image to a byte buffer
+            return buffer
 
 def main(userPath):
+
+    # for testing purposes
+    data = { 
+            "status" : "success",
+            "message" : "main.py executed",
+        }
+
     # Load the vectorized images
     product_list_aritzia = load_product_list('product_list_aritzia.pkl')
-    product_list_lacoste = load_product_list('product_list_lacoste.pkl')
+    # product_list_lacoste = load_product_list('product_list_lacoste.pkl')
 
-    all_products = {**get_image_vectors_from_products(product_list_aritzia),
-                    **get_image_vectors_from_products(product_list_lacoste)}
+    # all_products = {**get_image_vectors_from_products(product_list_aritzia),
+    #                 **get_image_vectors_from_products(product_list_lacoste)}
+
+    all_products = get_image_vectors_from_products(product_list_aritzia)
 
     # Fetch text from Firebase and download the latest image
     text_from_firebase = fetch_text_from_firestore(userPath)
     print(text_from_firebase)
+
     image_from_firebase = download_image_from_storage(userPath)
+    # image_from_firebase = "downloaded_images/currImage.webp"
 
     # Process the fetched text and downloaded image using GPT
     gpt_text = getGPTText(image_from_firebase, text_from_firebase)
+    print("FROM GPT: " + gpt_text)
 
     # Convert GPT text to vector
-    gpt_text_vector = itv.generate_text_vector(gpt_text).unsqueeze(0)
+    gpt_text_vector = itv.generate_text_vector(gpt_text)
 
     # Find closest images
     closest_images = itv.find_closest_images(all_products, gpt_text_vector)
 
     # Save URLs of closest images to Firestore
-    db = firestore.client()
-    urls_collection = db.collection('matchedImageUrls')
-    for image_url, _ in closest_images:
-        urls_collection.add({'url': image_url})
+    # db = firestore.client()
+    # urls_collection = db.collection('matchedImageUrls')
 
-    print("URLs of closest matching images have been saved to Firestore")
+    # x = 1
+    # for image_url, _ in closest_images:
+    #     urlName = 'url' + str(x)
+    #     urls_collection.add({urlName: image_url})
+    #     print(image_url)
+
+    topMatches = {}
+
+    x = 1
+    for image_url, similarityScore in closest_images:
+        #  print(str(similarityScore) + " " + str(image_url))
+         topMatches['url' + str(x)] = image_url
+         x+=1
+
+    # finalResults = json.dumps(topMatches)
+
+    return topMatches
 
 if __name__ == "__main__":
     main('testfolder')
