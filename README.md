@@ -3,10 +3,13 @@ Shopp'd is a simple website that aims to help you find the clothes you want!
 
 Simply upload an image containing the clothing you're looking for, describe the article of clothing you want from the image - and we'll do the rest.
 
+Future Updates will include the following:
+- Live Webscraping
+- Ability to explore more shopping site
 
 
 # How to Run
-Unfortunately, we currently don't have an active website due to the cost of web-scraping.
+Unfortunately, we currently don't have an active website at this moment.
 If you would like to run this app locally, just do the following:
 
 1. Clone the repo to your local machine
@@ -22,4 +25,6 @@ gptAPI = "sk-proj-abcdefghijklmonpXXXXXXXXXX"
 ```
 4. Run application.py
 5. Run *home.html* located in */website/home.html
+
+Note: At this moment, only the Aritzia option works, and all links and images are stored locally rather than web scraped 
 
