@@ -23,7 +23,7 @@ def getGPTText(image_from_firebase, text_from_firebase):
     }
 
     # Additional text to be added to the payload
-    additional_text = "In exactly 2 sentences and less than 100 characters, describe the specific clothing as if you were describing it to a shop keeper: " + text_from_firebase
+    additional_text = "In exactly 2 sentences and less than 100 characters, describe the specific clothing (singular) as if you were describing it to a shop keeper: " + text_from_firebase
 
     # Construct the payload
     payload = {
