@@ -1,4 +1,25 @@
 # Shopp'd
-Shopp'd is a simple website that aims to help you find the clothes you want! Simply upload an image containing the clothing you're looking for, describe the article of clothing you want from the image - and we'll do the rest!
+Shopp'd is a simple website that aims to help you find the clothes you want! 
 
-![Shopp'd Logo](https://github.com/bbdavidson11/shoppd/blob/main/website/shopping.png)
+Simply upload an image containing the clothing you're looking for, describe the article of clothing you want from the image - and we'll do the rest.
+
+
+
+# How to Run
+Unfortunately, we currently don't have an active website due to the cost of web-scraping.
+If you would like to run this app locally, just do the following:
+
+1. Clone the repo to your local machine
+2. Download the required packages. The following is non-comprehensive and may be subjected to change:
+
+```
+pip install firebase firebase_admin numpy pandas flask-cors flask pillow torch requests beautifulsoup4 git+https://github.com/openai/CLIP.git
+```
+3. Create a *.env* file and add a GPT API Key with the variable name 'gptAPI':
+
+``` 
+gptAPI = "sk-proj-abcdefghijklmonpXXXXXXXXXX"
+```
+4. Run application.py
+5. Run *home.html* located in */website/home.html
+
