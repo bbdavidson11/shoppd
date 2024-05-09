@@ -11,6 +11,7 @@ Future Updates will include the following:
 
 # How to Run
 Unfortunately, we currently don't have an active website at this moment.
+
 If you would like to run this app locally, just do the following:
 
 1. Clone the repo to your local machine
