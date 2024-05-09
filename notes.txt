@@ -8,5 +8,21 @@ flask-cors
 flask
 git+https://github.com/openai/CLIP.git
 pillow
-CLIP
 torch
+requests
+beautifulsoup4
+
+Because we're broke college students, we wont be hosting the flask app on a server 
+(especially if we include live webscraping - which would quickly add up costs)
+
+So instead, do the following steps: 
+1. run application.py (which holds our flask file)
+
+2. run home.html or index.html to get started
+
+3. go through the pages as the instructions tell you to
+
+note: we currently only have aritzia button working using pickled files that are stored locally
+This may/can be eventually replaced with webscraping
+
+Use console / firebase / local env to debug the program
