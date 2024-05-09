@@ -5,7 +5,8 @@ Simply upload an image containing the clothing you're looking for, describe the 
 
 Future Updates will include the following:
 - Live Webscraping
-- Ability to explore more shopping site
+- Option to explore clothing from more sites
+- Include "About Us", "Vision", and "Join Waitlist" pages
 
 
 # How to Run
