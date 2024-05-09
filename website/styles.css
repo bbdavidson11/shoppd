@@ -205,12 +205,16 @@ button:hover {
   background-color: #f09a07;
   height: 90%;
   width: 90%;
+  font-size: 22px;
+  font-weight: bold;
 }
 
 .match-buttons:hover {
   background-color: #250ecf;
   height: 100%;
   width: 100%;
+  font-size: 25px;
+  font-style: italic;
   transition: all 0.3s ease;
 }
 

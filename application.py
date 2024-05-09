@@ -18,9 +18,8 @@ def run_main():
     # You can modify main.py to accept parameters as needed
     results = main.main(userPath)  # Execute the main function
 
-    print(" AT FLASK RESULT: ")
-
-    print(results)
+    # print(" AT FLASK RESULT: ")
+    # print(results)
 
     data = { 
             "status" : "success",

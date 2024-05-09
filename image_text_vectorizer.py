@@ -19,7 +19,7 @@ def generate_vector(image_path):
 def generate_text_vector(text):
     with torch.no_grad():
         text_features = model.encode_text(clip.tokenize(text))
-        print("Shape of Text Vector from generated text:", text_features.shape)
+        # print("Shape of Text Vector from generated text:", text_features.shape)
     return text_features
 
 # Function to process all images in the directory and return their vectors

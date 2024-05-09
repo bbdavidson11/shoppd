@@ -108,7 +108,7 @@ def main(userPath):
          x+=1
 
     # use to debug vvvvvv
-    print(topMatches)
+    # print(topMatches)
 
     return topMatches
 

@@ -72,10 +72,22 @@
                 var currID = localStorage.getItem("uid");
                 console.log(currID)
 
+                // deletes the image currently stored in firebase storage
                 var storage = firebase.storage();
                 var folderRef = storage.ref('uploads/' + currID);
 
-                folderRef.delete();
+                folderRef.listAll().then(function(result) {
+                    result.items.forEach(function(itemRef) {
+                        itemRef.delete().then(function() {
+                            console.log('File deleted successfully.');
+                        }).catch(function(error) {
+                            console.error('Error deleting file:', error);
+                        });
+                    });
+                }).catch(function(error) {
+                    // Handle any errors that occur while listing the items
+                    console.error('Error listing items:', error);
+                });
 
                 var databaseRef = firebase.firestore().collection("userTextInputs").doc(currID);
                 databaseRef.remove;
