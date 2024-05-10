@@ -8,6 +8,7 @@ from PIL import Image
 from io import BytesIO
 sys.path.append('gptVectorized')
 from gptVectorized.image_and_text_gptoutput import getGPTText
+from scraper_and_comparer import webScrape
 
 class Product:
     def __init__(self, image_url, image_vector):
@@ -101,14 +102,14 @@ def main(userPath):
 
     topMatches = {}
 
-    x = 1
+    # might be useless code, probably only have to return closest_images tbh
     for image_url, similarityScore in closest_images:
         #  print(str(similarityScore) + " " + str(image_url)) <----- use to debug
          topMatches['url' + str(x)] = image_url
          x+=1
 
     # use to debug vvvvvv
-    # print(topMatches)
+    print(topMatches)
 
     return topMatches
 

@@ -31,7 +31,8 @@ def process_directory(directory_path):
             image_vectors[image_name] = generate_vector(image_path)
     return image_vectors
 
-# Function to find the closest images to the text
+# Function to find the closest images to the tex
+# Note: image_vectors is actually a dict composed of the link and the image
 def find_closest_images(image_vectors, text_vector, n=10):
     print("Shape of text vector:", text_vector.shape)
     # print("Shape of image vector:", image_vectors.shape)

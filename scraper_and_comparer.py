@@ -5,6 +5,8 @@ from PIL import Image
 from io import BytesIO
 import torch
 import clip
+import time
+from image_text_vectorizer import generate_text_vector, find_closest_images
 
 
 model, preprocess = clip.load("ViT-B/32")
@@ -30,23 +32,37 @@ def download_process_img(imgLink):
 
     return generate_vector(image)
 
+def webScrape(inputText):
+    start_time = time.time()
 
-if __name__ == "__main__":
-
-    url = "https://www.aritzia.com/us/en/clothing?lastViewed=100"
+    url = "https://www.aritzia.com/us/en/clothing?lastViewed=50"
     html = requests.get(url)
 
     soup = BeautifulSoup(html.content, 'lxml')
 
-    clothingContainer = soup.find_all('div', class_="product-image ar-product-image js-product-plp-image tc js-product-plp-image--trigger-qv", limit=20)
+    clothingContainer = soup.find_all('div', class_="product-image ar-product-image js-product-plp-image tc js-product-plp-image--trigger-qv", limit=50)
     # note: first few are usually placeholder images - so useless to us
     clothingContainer = clothingContainer[10:]
 
+    productDict = {}
 
     for clothing in clothingContainer:
         imgLink = clothing.find('img')["data-mouseover-img"]
         img = download_process_img(imgLink)
 
+        productLink = clothing.find('a')["href"]
 
-        link = clothing.find('a')["href"]
+        productDict[productLink] = img
+
+    # to check webscrape runtime vvv
+    end_time = time.time()
+    print("final time for scraping: " + str(end_time - start_time) + " seconds")
+
+    return find_closest_images(productDict, inputText)
+
+
+
+if __name__ == "__main__":
+    vectorizedText = generate_text_vector("a green tank top")
+    webScrape(vectorizedText)
 
