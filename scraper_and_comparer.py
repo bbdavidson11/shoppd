@@ -8,7 +8,6 @@ import clip
 import time
 from image_text_vectorizer import generate_text_vector, find_closest_images
 
-
 model, preprocess = clip.load("ViT-B/32")
 
 class Product:
@@ -16,7 +15,7 @@ class Product:
         self.image_url = image_url
         self.image_vector = image_vector
 
-
+# generates vector for image only
 def generate_vector(image):
     image = preprocess(image).unsqueeze(0)
     with torch.no_grad():
@@ -35,12 +34,12 @@ def download_process_img(imgLink):
 def webScrape(inputText):
     start_time = time.time()
 
-    url = "https://www.aritzia.com/us/en/clothing?lastViewed=50"
+    url = "https://www.aritzia.com/us/en/clothing?lastViewed=500"
     html = requests.get(url)
 
     soup = BeautifulSoup(html.content, 'lxml')
 
-    clothingContainer = soup.find_all('div', class_="product-image ar-product-image js-product-plp-image tc js-product-plp-image--trigger-qv", limit=50)
+    clothingContainer = soup.find_all('div', class_="product-image ar-product-image js-product-plp-image tc js-product-plp-image--trigger-qv", limit=400)
     # note: first few are usually placeholder images - so useless to us
     clothingContainer = clothingContainer[10:]
 

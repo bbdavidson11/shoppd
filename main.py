@@ -78,9 +78,8 @@ def main(userPath):
         }
 
     # Load the vectorized images
-    product_list_aritzia = load_product_list('product_list_aritzia.pkl')
-
-    all_products = get_image_vectors_from_products(product_list_aritzia)
+    # product_list_aritzia = load_product_list('product_list_aritzia.pkl')
+    # all_products = get_image_vectors_from_products(product_list_aritzia)
 
     # Fetch text from Firebase and download the latest image
     text_from_firebase = fetch_text_from_firestore(userPath)
@@ -98,10 +97,12 @@ def main(userPath):
     gpt_text_vector = itv.generate_text_vector(gpt_text)
 
     # Find closest images
-    closest_images = itv.find_closest_images(all_products, gpt_text_vector)
+    # closest_images = itv.find_closest_images(all_products, gpt_text_vector)
+    closest_images = webScrape(gpt_text_vector)
 
     topMatches = {}
 
+    x = 1
     # might be useless code, probably only have to return closest_images tbh
     for image_url, similarityScore in closest_images:
         #  print(str(similarityScore) + " " + str(image_url)) <----- use to debug
