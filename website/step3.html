@@ -55,6 +55,13 @@
                     console.log(uid);
                 }
 
+                var shop = localStorage.getItem("shop");
+                if (shop === null) {
+                    window.location.href = 'step2.html';
+                }
+
+                console.log(shop)
+
                 var textInput = document.getElementById("searchInputPrompt").value;
                 if(textInput) {
                     // Upload text to Firebase Database
@@ -69,7 +76,7 @@
                                 'Accept': 'application/json',
                                 'Content-Type': 'application/json',
                             },
-                            body: JSON.stringify({id: uid})
+                            body: JSON.stringify({id: uid, store: shop})
                         })
                         .then(response  => response.json())
                         .then(data => {

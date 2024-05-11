@@ -16,30 +16,40 @@
         <div class="dynamic-side">
             <div class="step step-one">
                 <h2 class="step_one">STEP TWO:</h2>
-                <h1 class="upload">search</h1>
-                <p class="text">search for where you want to shop!</p>
-                
-                    <div class="search-bar-container">
-                       
-                        <input type="text" id="searchInput" placeholder="ex. zara.com" />
-                      
-                    </div>
+                <h1 class="upload">The Store</h1>
+                <p class="text">choose where you want to shop!</p>
                     <p class="text-1"> or choose from </p>
                     <div class="brand-container">
+
+
                         <div class="brand-option">
-                            <img src="a.svg" alt="LACOSTE" />
-                          <p>Aritzia</p>
+                            <img onclick="shopClicked('Aritzia')" class="brand-img" src="a.svg" alt="ARITZIA" />
+                          <p class="brand-text">Aritzia</p>
                         </div>
+
+
                         <div class="brand-option">
-                          <img src="lacoste.png" alt="LACOSTE" />
-                          <p>Lacoste</p>
+                          <img onclick="shopClicked('Lacoste')" class="brand-img" src="lacoste2.png" alt="LACOSTE" />
+                          <p class="brand-text">Lacoste</p>
                         </div>
+
+
+                        <div class="brand-option">
+                            <img onclick="shopClicked('Lululemon')" class="brand-img" src="lululemon2.png" alt="LULULEMON" />
+                          <p class="brand-text">Lululemon</p>
+                        </div>
+
+
+                        <div class="brand-option">
+                          <img onclick="shopClicked('HM')" class="brand-img" src="HM.webp" alt="H&M" />
+                          <p class="brand-text">H&M</p>
+                        </div>
+                        
                       </div>
                       
                       
              
             </div>
-            <!-- Additional steps would go here -->
         </div>
 
         
@@ -47,24 +57,11 @@
 
     </div>
     <script>
-        // Wait for the DOM to be fully loaded
-        document.addEventListener('DOMContentLoaded', function() {
-            // Event listener for Aritzia option
-            var aritziaOption = document.querySelector('.brand-option img[alt="ARITZIA"]');
-            if (aritziaOption) {
-                aritziaOption.parentNode.addEventListener('click', function() {
-                    window.location.href = 'step3.html';
-                });
-            }
-            
-            // Event listener for Lacoste option
-            var lacosteOption = document.querySelector('.brand-option img[alt="LACOSTE"]');
-            if (lacosteOption) {
-                lacosteOption.parentNode.addEventListener('click', function() {
-                    window.location.href = 'step3.html';
-                });
-            }
-        });
+        function shopClicked(shop) {
+            console.log(shop + " is clicked");
+            localStorage.setItem("shop", shop);
+            window.location.href='step3.html'
+        }
     </script>
 </body>
 </html>

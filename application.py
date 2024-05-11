@@ -12,7 +12,9 @@ CORS(applcation, origins=['*'])
 def run_main():
     data = request.json
     userPath = data["id"]
-    print(userPath)
+    userShop = data["store"]
+
+    print("firebase folder: " + userPath + ", store: " + userShop)
     # flash("You are successfully login into the Flask Application")
     # Assuming the data contains the necessary information
     # You can modify main.py to accept parameters as needed

@@ -11,6 +11,7 @@ pillow
 torch
 requests
 beautifulsoup4
+selenium
 
 Because we're broke college students, we wont be hosting the flask app on a server 
 (especially if we include live webscraping - which would quickly add up costs)
