@@ -4,6 +4,7 @@ import clip
 from PIL import Image
 import os
 import numpy as np
+import time
 
 # Load the CLIP model
 model, preprocess = clip.load("ViT-B/32")
@@ -46,6 +47,9 @@ def find_closest_images(image_vectors, text_vector, n=10):
 
 # Example usage
 if __name__ == "__main__":
+
+    start_time = time.time()
+
     directory_path = "F:\Shoppd Project\shoppd\screenshots_aritzia"  # Replace with your image directory
     vectors = process_directory(directory_path)
 
@@ -55,8 +59,12 @@ if __name__ == "__main__":
     sample_text = "green pair of pants"  # Replace with your text input
     text_vector = generate_text_vector(sample_text)
     
+    
     # Find and print the 5 most similar images to the text input
     closest_images = find_closest_images(vectors, text_vector)
     print("Top matches for the input text:")
     for image_name, similarity in closest_images:
         print(f"{image_name}: {similarity}")
+
+    end_time = time.time()
+    print("final time for scraping: " + str(end_time - start_time) + " seconds")

@@ -8,7 +8,7 @@ from PIL import Image
 from io import BytesIO
 sys.path.append('gptVectorized')
 from gptVectorized.image_and_text_gptoutput import getGPTText
-from scraper_and_comparer import webScrape
+from webscraper.scraper_and_comparer import webScrape
 
 class Product:
     def __init__(self, image_url, image_vector):
@@ -69,7 +69,7 @@ def image_to_base64(image):
     encoded_image = base64.b64encode(buffered.getvalue())  # Encode the image buffer to base64
     return encoded_image.decode('utf-8')  # Convert bytes to string and return
 
-def main(userPath):
+def main(userPath, userShop):
 
     # for testing purposes
     data = { 
@@ -98,7 +98,7 @@ def main(userPath):
 
     # Find closest images
     # closest_images = itv.find_closest_images(all_products, gpt_text_vector)
-    closest_images = webScrape(gpt_text_vector)
+    closest_images = webScrape(gpt_text_vector, userShop)
 
     topMatches = {}
 

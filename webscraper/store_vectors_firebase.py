@@ -1,4 +1,5 @@
 import firebase_admin
+from firebase_admin import credentials
 
 # Firebase initialization
 cred = credentials.Certificate("firebasecred.json")
