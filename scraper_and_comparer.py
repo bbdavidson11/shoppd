@@ -23,7 +23,9 @@ def generate_vector(image):
     return image_features
 
 def download_process_img(imgLink):
-    response = requests.get(imgLink)
+    headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9'}
+
+    response = requests.get(imgLink, headers=headers)
     image = Image.open(BytesIO(response.content))
 
     # use to view images - WARNING: Please lower the limit on how many items are webscraped or it'll show every image
@@ -35,25 +37,28 @@ def webScrape(inputText, store="Aritzia"):
     start_time = time.time()
 
     if store == "Aritzia":
-        productDict = getAritzia()
-    elif store == "HM":
-        productDict = getHM()
+        result = getAritzia(inputText)
+    elif store == "Lacoste":
+        result = getLacoste(inputText)
+    elif store == "Abercrombie":
+        result = getAbercrombie(inputText)
+    elif store == "Tom Ford":
+        result = getTomFord(inputText)
 
-    # to check webscrape runtime vvv
-    # end_time = time.time()
-    # print("final time for scraping: " + str(end_time - start_time) + " seconds")
+    end_time = time.time()
+    print("final time for scraping: " + str(end_time - start_time) + " seconds")
 
-    # return find_closest_images(productDict, inputText)
+    return result
 
 
-def getAritzia():
+def getAritzia(inputText):
     
     url = "https://www.aritzia.com/us/en/clothing?lastViewed=500"
     html = requests.get(url)
 
     soup = BeautifulSoup(html.content, 'lxml')
 
-    clothingContainer = soup.find_all('div', class_="product-image ar-product-image js-product-plp-image tc js-product-plp-image--trigger-qv", limit=500)
+    clothingContainer = soup.find_all('div', class_="product-image ar-product-image js-product-plp-image tc js-product-plp-image--trigger-qv", limit=320)
     # note: first few are usually placeholder images - so useless to us
     clothingContainer = clothingContainer[10:]
 
@@ -67,28 +72,145 @@ def getAritzia():
 
         productDict[productLink] = img
 
-    return productDict
+    return find_closest_images(productDict, inputText)
 
-def getHM():
-    print("got to H&M")
+def getLacoste(inputText):
+    print("got to Lacoste")
     headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9'}
-    url = "https://www2.hm.com/en_us/women/new-arrivals/view-all.html"
-    html = requests.get(url, headers=headers)
-    soup = BeautifulSoup(html.content, 'lxml')
 
-    # used to debug - uncomment to save a the html page that's retrieved and try to scrape using it as reference
-    # with open("scraped_page.html", "w", encoding="utf-8") as file:
-    #     file.write(soup.prettify())
+    urlBaseWomen = "https://www.lacoste.com/us/lacoste/women/clothing/?sortBy=lc_t2s_rank1&page="
+    urlBaseMen = "https://www.lacoste.com/us/lacoste/men/clothing/?sortBy=lc_t2s_rank1&page="
 
-    clothingContainer = soup.find("a", class_="db7c79")
+    baseLinks = [urlBaseWomen, urlBaseMen]
+
+    productDict = {}
+    topVectors = []
+
+    # note: each page has 36 items (as of 5/11/24), and the following loop will do it the specified number of times for both men and woman pages
+    # The formula for the number of pages scraped is: 2 * (num - 1) * 32
+    # make sure num >= 2 and you don't exceed # of pages Lacoste
+    numLoops = 6
+    for urlBase in baseLinks:
+        for y in range (1, numLoops):
+            currUrl = urlBase + str(y)
+            html = requests.get(currUrl, headers=headers)
+            soup = BeautifulSoup(html.content, 'lxml')
+
+            clothingContainer = soup.find_all('a', class_="js-product-tile-link l-relative no-user-select")
+
+            for clothing in clothingContainer:
+                productLink = clothing["href"]
+
+                imgLink = "https:" + clothing.find('img')["data-alternate-src"]
+                img = download_process_img(imgLink)
+
+                productDict[productLink] = img
+
+            topVectors = topVectors + find_closest_images(productDict, inputText)
+            productDict = {}
+
+
+            # used to debug - uncomment to save a the html page that's retrieved and try to scrape using it as reference
+            # put this inside the loop or write a simple code to request url
+            # with open("scraped_page.html", "w", encoding="utf-8") as file:
+            #     file.write(soup.prettify())
+
+    sorted_items = sorted(list(set(topVectors)), key=lambda x: x[1], reverse=True)
+
+    return sorted_items[:10]
+
+def getAbercrombie(inputText):
+    baseMenURL = "https://www.abercrombie.com/shop/us/mens?filtered=true&rows=90&start="
+    baseWomenURL = "https://www.abercrombie.com/shop/us/womens?filtered=true&rows=90&start="
+
+    baseURLs = [baseMenURL, baseWomenURL]
+
+    headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9'}
+
+    productDict = {}
+    topVectors = []
+
+    # Note: each page has 90 images, which is what the URL goes off of
+    numLoops = 2
+    for url in baseURLs:
+        for y in range (0, numLoops):
+            html = requests.get(url + str(y * 90), headers=headers)
+            soup = BeautifulSoup(html.content, 'lxml')
+            
+            # Each product card has the specific attribute "data-aui" with the value "product-card"
+            clothingContainer = soup.find_all('li', {"data-aui":"product-card"})
+
+            for clothing in clothingContainer:
+                productLink = "https://www.abercrombie.com" + clothing.find('a')["href"]
+
+                # There's a js file called "getImageUrl.js" that defines how their image urls are made
+                imgID = clothing["data-intlkic"]
+                imgLink = "https://img.abercrombie.com/is/image/anf/" + imgID + "_prod1?policy=product-medium"
+
+                print(imgLink)
+
+                try:
+                    # downloads and vectorizes the image
+                    img = download_process_img(imgLink)
+
+                    # add to the dict
+                    productDict[productLink] = img
+
+                # sometimes, the image link doesn't work - so we'll just print the link and continue
+                except:
+                    print("error getting image at: " + imgLink)
+                    continue
+                    
+
+            topVectors = topVectors + find_closest_images(productDict, inputText)
+            productDict = {}
+        
+    sorted_items = sorted(list(set(topVectors)), key=lambda x: x[1], reverse=True)
+    return sorted_items[:10]
+
+
+def getTomFord(inputText = "a light green pant"):
+
+    # note - pages are in increments of 90
+    baseMenUrl = "https://www.tomfordfashion.com/men/ready-to-wear/?start=0&sz=200"
+    baseWomenUrl = "https://www.tomfordfashion.com/women/ready-to-wear/?start=0&sz=200"
+    
+    baseURLs = [baseMenUrl, baseWomenUrl]
+
+    headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9'}
+
+    productDict = {}
+    topVectors = []
+
+    for url in baseURLs:
+        html = requests.get(url, headers=headers)
+        soup = BeautifulSoup(html.content, 'lxml')
+        clothingContainer = soup.find_all('div', class_="image-container", limit=150)
+
+        for clothing in clothingContainer:
+            productLink = "https://www.tomfordfashion.com" + clothing.find('a')["href"]
+
+            imgLink = clothing.find('img')["src"]
+
+            img = download_process_img(imgLink)
+
+            productDict[productLink] = img
+
+        topVectors = topVectors + find_closest_images(productDict, inputText)
+        productDict = {}
+
+    sorted_items = sorted(list(set(topVectors)), key=lambda x: x[1], reverse=True)
+    return sorted_items[:10]
 
 
 
 
-
+    
 
 
 if __name__ == "__main__":
-    vectorizedText = generate_text_vector("a green tank top")
-    webScrape(vectorizedText, "HM")
+    download_process_img("https://cdn.media.amplience.net/i/tom_ford/LBS038-LMG014S24_LB999_APPENDGRID")
+
+    vectorizedText = generate_text_vector("a pink dress")
+    print(webScrape(vectorizedText, "Aritzia"))
 

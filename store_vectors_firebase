@@ -1,0 +1,7 @@
+import firebase_admin
+
+# Firebase initialization
+cred = credentials.Certificate("firebasecred.json")
+firebase_admin.initialize_app(cred, {
+    'storageBucket': 'shop-d-ea02c.appspot.com'
+})
