@@ -171,7 +171,6 @@ def getAbercrombie(inputText):
 
 def getTomFord(inputText = "a light green pant"):
 
-    # note - pages are in increments of 90
     baseMenUrl = "https://www.tomfordfashion.com/men/ready-to-wear/?start=0&sz=200"
     baseWomenUrl = "https://www.tomfordfashion.com/women/ready-to-wear/?start=0&sz=200"
     
@@ -185,7 +184,7 @@ def getTomFord(inputText = "a light green pant"):
     for url in baseURLs:
         html = requests.get(url, headers=headers)
         soup = BeautifulSoup(html.content, 'lxml')
-        clothingContainer = soup.find_all('div', class_="image-container", limit=150)
+        clothingContainer = soup.find_all('div', class_="image-container", limit=5)
 
         for clothing in clothingContainer:
             productLink = "https://www.tomfordfashion.com" + clothing.find('a')["href"]
@@ -212,5 +211,5 @@ if __name__ == "__main__":
     download_process_img("https://cdn.media.amplience.net/i/tom_ford/LBS038-LMG014S24_LB999_APPENDGRID")
 
     vectorizedText = generate_text_vector("a pink dress")
-    print(webScrape(vectorizedText, "Aritzia"))
+    print(webScrape(vectorizedText, "Tom Ford"))
 

@@ -8,7 +8,7 @@ from PIL import Image
 from io import BytesIO
 sys.path.append('gptVectorized')
 from gptVectorized.image_and_text_gptoutput import getGPTText
-from webscraper.scraper_and_comparer import webScrape
+from scraper_and_comparer import webScrape
 
 class Product:
     def __init__(self, image_url, image_vector):
@@ -16,7 +16,7 @@ class Product:
         self.image_vector = image_vector
 
 # Firebase initialization
-cred = credentials.Certificate("firebasecred.json")
+cred = credentials.Certificate("ServiceAccountKey.json")
 firebase_admin.initialize_app(cred, {
     'storageBucket': 'shop-d-ea02c.appspot.com'
 })
@@ -115,4 +115,4 @@ def main(userPath, userShop):
     return topMatches
 
 if __name__ == "__main__":
-    main('testfolder')
+    main('testfolder', "Aritzia")
