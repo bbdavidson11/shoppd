@@ -7,6 +7,7 @@ import torch
 import clip
 import time
 from image_text_vectorizer import generate_text_vector, find_closest_images
+from store_retrieve_vectors_ import storeTo
 
 model, preprocess = clip.load("ViT-B/32")
 
@@ -208,8 +209,6 @@ def getTomFord(inputText = "a light green pant"):
 
 
 if __name__ == "__main__":
-    download_process_img("https://cdn.media.amplience.net/i/tom_ford/LBS038-LMG014S24_LB999_APPENDGRID")
-
     vectorizedText = generate_text_vector("a pink dress")
     print(webScrape(vectorizedText, "Tom Ford"))
 
