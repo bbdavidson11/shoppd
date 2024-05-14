@@ -11,7 +11,9 @@ Future Updates will include the following:
 ## Dependences:
 The following dependences are in no way comprehensive, and may be subjected to change. Please view any error logs that may appear:
 
-```pip install firebase firebase_admin numpy pandas flask-cors flask pillow torch requests beautifulsoup4 git+https://github.com/openai/CLIP.git```
+```
+pip install firebase firebase_admin numpy pandas flask-cors flask pillow torch requests beautifulsoup4 git+https://github.com/openai/CLIP.git
+```
 
 ## How to Run
 If you would like to run this app locally, just do the following:
