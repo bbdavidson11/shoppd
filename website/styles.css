@@ -174,7 +174,7 @@ button:hover {
     border-radius: 20px; /* Rounded corners */
     padding: 40px; /* Padding inside each brand option */
     text-align: center; /* Center the text and image */
-    width: 150px; /* Width of each brand option */
+    width: 100%; /* Width of each brand option */
     cursor: pointer; /* Change mouse cursor to indicate these are clickable */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Optional: adds shadow for depth */
     transition: transform 0.3s; /* Smooth transition for hover effect */

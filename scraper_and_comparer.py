@@ -196,7 +196,7 @@ def getTomFord(inputText = "a light green pant"):
     for url in baseURLs:
         html = requests.get(url, headers=headers)
         soup = BeautifulSoup(html.content, 'lxml')
-        clothingContainer = soup.find_all('div', class_="image-container", limit=500)
+        clothingContainer = soup.find_all('div', class_="image-container", limit=130)
 
         for clothing in clothingContainer:
             productLink = "https://www.tomfordfashion.com" + clothing.find('a')["href"]
@@ -206,6 +206,8 @@ def getTomFord(inputText = "a light green pant"):
             img = download_process_img(imgLink)
 
             productDict[productLink] = img
+
+            print(productLink)
 
     return productDict
 
