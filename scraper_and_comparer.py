@@ -7,6 +7,7 @@ import torch
 import clip
 import time
 from image_text_vectorizer import generate_text_vector, find_closest_images
+import store_retrieve_vectors
 
 model, preprocess = clip.load("ViT-B/32")
 
@@ -36,29 +37,48 @@ def download_process_img(imgLink):
 def webScrape(inputText, store="Aritzia"):
     start_time = time.time()
 
-    if store == "Aritzia":
-        result = getAritzia(inputText)
-    elif store == "Lacoste":
-        result = getLacoste(inputText)
-    elif store == "Abercrombie":
-        result = getAbercrombie(inputText)
-    elif store == "Tom Ford":
-        result = getTomFord(inputText)
+    # this try-catch statement basically tries to get the last time this store was scraped
+    # if it was last scraped more than a week ago, then we'll update the vectors - since the clothes might be out of stock
+    # if it was never scraped (which we'll catch here), then we'll just set time to 0
+    try:
+        last_scrape = store_retrieve_vectors.getTime(store)
+    except:
+        last_scrape = 0
+
+    print("current time: " + str(start_time))
+    print("last scrape occured on" + str(last_scrape))
+    
+    if start_time - last_scrape > (24*60*60*7):
+        if store == "Aritzia":
+            result = getAritzia(inputText)
+        elif store == "Lacoste":
+            result = getLacoste(inputText)
+        elif store == "Abercrombie":
+            result = getAbercrombie(inputText)
+        elif store == "Tom Ford":
+            result = getTomFord(inputText)
+
+        store_retrieve_vectors.storeTo(store, result)
+    else:
+        result = store_retrieve_vectors.getVectors(store)
+
+    topMatches = find_closest_images(result, inputText)
 
     end_time = time.time()
     print("final time for scraping: " + str(end_time - start_time) + " seconds")
 
-    return result
+    # return result
+    return topMatches
 
 
 def getAritzia(inputText):
     
-    url = "https://www.aritzia.com/us/en/clothing?lastViewed=500"
+    url = "https://www.aritzia.com/us/en/clothing?lastViewed=1000"
     html = requests.get(url)
 
     soup = BeautifulSoup(html.content, 'lxml')
 
-    clothingContainer = soup.find_all('div', class_="product-image ar-product-image js-product-plp-image tc js-product-plp-image--trigger-qv", limit=320)
+    clothingContainer = soup.find_all('div', class_="product-image ar-product-image js-product-plp-image tc js-product-plp-image--trigger-qv", limit=1000)
     # note: first few are usually placeholder images - so useless to us
     clothingContainer = clothingContainer[10:]
 
@@ -72,7 +92,8 @@ def getAritzia(inputText):
 
         productDict[productLink] = img
 
-    return find_closest_images(productDict, inputText)
+    # return find_closest_images(productDict, inputText)
+    return productDict
 
 def getLacoste(inputText):
     print("got to Lacoste")
@@ -84,12 +105,11 @@ def getLacoste(inputText):
     baseLinks = [urlBaseWomen, urlBaseMen]
 
     productDict = {}
-    topVectors = []
 
     # note: each page has 36 items (as of 5/11/24), and the following loop will do it the specified number of times for both men and woman pages
     # The formula for the number of pages scraped is: 2 * (num - 1) * 32
     # make sure num >= 2 and you don't exceed # of pages Lacoste
-    numLoops = 6
+    numLoops = 8
     for urlBase in baseLinks:
         for y in range (1, numLoops):
             currUrl = urlBase + str(y)
@@ -106,8 +126,6 @@ def getLacoste(inputText):
 
                 productDict[productLink] = img
 
-            topVectors = topVectors + find_closest_images(productDict, inputText)
-            productDict = {}
 
 
             # used to debug - uncomment to save a the html page that's retrieved and try to scrape using it as reference
@@ -115,9 +133,7 @@ def getLacoste(inputText):
             # with open("scraped_page.html", "w", encoding="utf-8") as file:
             #     file.write(soup.prettify())
 
-    sorted_items = sorted(list(set(topVectors)), key=lambda x: x[1], reverse=True)
-
-    return sorted_items[:10]
+    return productDict
 
 def getAbercrombie(inputText):
     baseMenURL = "https://www.abercrombie.com/shop/us/mens?filtered=true&rows=90&start="
@@ -131,7 +147,8 @@ def getAbercrombie(inputText):
     topVectors = []
 
     # Note: each page has 90 images, which is what the URL goes off of
-    numLoops = 2
+    # numLoops = 2
+    numLoops = 3
     for url in baseURLs:
         for y in range (0, numLoops):
             html = requests.get(url + str(y * 90), headers=headers)
@@ -158,33 +175,28 @@ def getAbercrombie(inputText):
 
                 # sometimes, the image link doesn't work - so we'll just print the link and continue
                 except:
-                    print("error getting image at: " + imgLink)
                     continue
                     
 
-            topVectors = topVectors + find_closest_images(productDict, inputText)
-            productDict = {}
         
-    sorted_items = sorted(list(set(topVectors)), key=lambda x: x[1], reverse=True)
-    return sorted_items[:10]
+    return productDict
 
 
 def getTomFord(inputText = "a light green pant"):
 
-    baseMenUrl = "https://www.tomfordfashion.com/men/ready-to-wear/?start=0&sz=200"
-    baseWomenUrl = "https://www.tomfordfashion.com/women/ready-to-wear/?start=0&sz=200"
+    baseMenUrl = "https://www.tomfordfashion.com/men/ready-to-wear/?start=0&sz=500"
+    baseWomenUrl = "https://www.tomfordfashion.com/women/ready-to-wear/?start=0&sz=500"
     
     baseURLs = [baseMenUrl, baseWomenUrl]
 
     headers = {'User-Agent':'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9'}
 
     productDict = {}
-    topVectors = []
 
     for url in baseURLs:
         html = requests.get(url, headers=headers)
         soup = BeautifulSoup(html.content, 'lxml')
-        clothingContainer = soup.find_all('div', class_="image-container", limit=5)
+        clothingContainer = soup.find_all('div', class_="image-container", limit=500)
 
         for clothing in clothingContainer:
             productLink = "https://www.tomfordfashion.com" + clothing.find('a')["href"]
@@ -195,21 +207,10 @@ def getTomFord(inputText = "a light green pant"):
 
             productDict[productLink] = img
 
-        topVectors = topVectors + find_closest_images(productDict, inputText)
-        productDict = {}
-
-    sorted_items = sorted(list(set(topVectors)), key=lambda x: x[1], reverse=True)
-    return sorted_items[:10]
-
-
-
-
-    
+    return productDict
 
 
 if __name__ == "__main__":
-    download_process_img("https://cdn.media.amplience.net/i/tom_ford/LBS038-LMG014S24_LB999_APPENDGRID")
-
     vectorizedText = generate_text_vector("a pink dress")
-    print(webScrape(vectorizedText, "Tom Ford"))
+    print(webScrape(vectorizedText, "Lacoste"))
 

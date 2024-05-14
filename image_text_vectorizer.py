@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     start_time = time.time()
 
-    directory_path = "F:\Shoppd Project\shoppd\screenshots_aritzia"  # Replace with your image directory
+    directory_path = "F:\Shoppd Project\shoppd\\test_screenshots"  # Replace with your image directory
     vectors = process_directory(directory_path)
 
     print(vectors)

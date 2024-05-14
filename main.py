@@ -1,5 +1,6 @@
 import firebase_admin
-from firebase_admin import credentials, firestore, storage
+from firebase_admin import credentials, storage, firestore
+import instantiate_firebase
 import pickle
 import image_text_vectorizer as itv
 import sys
@@ -14,12 +15,6 @@ class Product:
     def __init__(self, image_url, image_vector):
         self.image_url = image_url
         self.image_vector = image_vector
-
-# Firebase initialization
-cred = credentials.Certificate("ServiceAccountKey.json")
-firebase_admin.initialize_app(cred, {
-    'storageBucket': 'shop-d-ea02c.appspot.com'
-})
 
 def load_product_list(filename):
     with open(filename, 'rb') as file:
