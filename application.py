@@ -2,7 +2,11 @@ from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS, cross_origin
 import json
 import flask_cors
-import main  # Import your main.py
+import main
+import firebase_admin
+from firebase_admin import credentials, firestore, storage
+import instantiate_firebase
+
 
 applcation = Flask(__name__)
 # CORS(app)  # Enable CORS for all routes
@@ -30,6 +34,7 @@ def run_main():
     
     result = jsonify(results)
 
+    # we can also do render_template('output.html', data=jsonify(results)) - but we'll have to rewrite the js
     return jsonify(results)
 
 if __name__ == '__main__':

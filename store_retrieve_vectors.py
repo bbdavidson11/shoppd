@@ -3,16 +3,12 @@ from firebase_admin import credentials, storage, firestore
 import torch
 import pickle
 import time
-
-cred = credentials.Certificate("ServiceAccountKey.json")
-firebase_admin.initialize_app(cred, {
-    'storageBucket': 'shop-d-ea02c.appspot.com'
-})
-
+import instantiate_firebase
 
 # firebase storage is wrapper for gcs - view documentation here: 
 # https://cloud.google.com/python/docs/reference/storage/latest/google.cloud.storage.blob.Blob#google_cloud_storage_blob_Blob_upload_from_file
 def storeTo(path, info: dict):
+    # converts the dict into an object file in memory
     pickled_vectors = pickle.dumps(info)
 
     bucket = storage.bucket()
@@ -21,29 +17,35 @@ def storeTo(path, info: dict):
     # the current file will automatically be overwritten :)
     blob.upload_from_string(pickled_vectors)
 
+    # function that sets the time of when the last webscrape occured (i.e. current time)
     markTime(path)
 
+
 def getVectors(path):
+
     bucket = storage.bucket()
     blob = bucket.blob("scraped_items/" + path)
     pickled_info = blob.download_as_bytes()
 
     finalInfo = pickle.loads(pickled_info)
 
+    return finalInfo
+
 
 def markTime(path):
     currTime = time.time()
 
     db = firestore.client()
-    doc_ref = db.collection("test").document("test")
-    doc_ref.set({path + str(1) : str(currTime)})
-
-    
+    doc_ref = db.collection("web_scraping").document(path)
+    doc_ref.set({"time" : str(currTime)})
 
 
+def getTime(path):
 
-
-    
+    db = firestore.client()
+    doc_ref = db.collection("web_scraping").document(path)
+    timeRef = doc_ref.get()._data
+    return float(timeRef.get("time"))
 
 
 
@@ -969,5 +971,6 @@ if __name__ == "__main__":
          -2.6380e-01, -2.4832e-01,  1.5352e-01,  1.1261e-01,  7.7445e-01,
          -9.5634e-02,  3.8519e-01]])}
     
-    storeTo("testStoring", testInfo)
+    # storeTo("testStoring", testInfo)
     # getVectors("testStoring")
+    getTime("testStoring")
