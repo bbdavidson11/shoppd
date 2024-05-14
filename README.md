@@ -1,17 +1,12 @@
 # Shopp'd
 Shopp'd is a simple website that aims to help you find the clothes you want! 
 
-Simply upload an image containing the clothing you're looking for, describe the article of clothing you want from the image - and we'll do the rest. Our current website is capable of live-webscraping a number of stores in order to find the best match for you.
+Simply upload an image containing the clothing you're looking for, describe the article of clothing you want from the image - and we'll do the rest. Our current website is capable of live-webscraping select stores in order to find the best match for you.
 
 Future Updates will include the following:
-- Storing Livescraped data to Firestore to allow shorter wait times
-- Option to explore clothing from more sites
 - Include "About Us", "Vision", and "Join Waitlist" pages
 
-
 # How to Run
-Unfortunately, we currently don't have an active website at this moment.
-
 If you would like to run this app locally, just do the following:
 
 1. Clone the repo to your local machine
@@ -30,5 +25,5 @@ gptAPI = "sk-proj-abcdefghijklmonpXXXXXXXXXX"
 6. Run application.py
 7. Run *home.html* located in */website/home.html
 
-Note: At this moment, only the Aritzia option works, and all links and images are stored locally rather than web scraped 
+Note: If the last web-scrape of the chosen store was over a week ago, then the app will automatically initiate a web-scrape. This scrape might cause response times to increase significantly (up to 10 minutes for a full scrape based on current parameters)
 
