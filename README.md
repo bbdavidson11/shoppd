@@ -25,7 +25,7 @@ If you would like to run this app locally, just do the following:
 gptAPI = "sk-proj-abcdefghijklmonpXXXXXXXXXX"
 ```
 3. Create a Firebase Account and create a new Firestore Project
-4. Grab your Firestore Credentials, rename the file to ServiceAccountKey.json, and move it into the project. References on how to do this found [here](https://www.youtube.com/watch?v=yylnC3dr_no&t=321s)
+4. Grab your Firestore Credentials, rename the file to ServiceAccountKey.json, and move it into the project. References on how to do this found [here](https://www.youtube.com/watch?v=yylnC3dr_no&t=67s)
 5. Run application.py
 6. Run *home.html* located in */website/home.html
 
