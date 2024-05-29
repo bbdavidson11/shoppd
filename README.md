@@ -27,7 +27,7 @@ gptAPI = "sk-proj-abcdefghijklmonpXXXXXXXXXX"
 3. Create a Firebase Account and create a new Firestore Project
 4. Grab your Firestore Credentials, rename the file to ServiceAccountKey.json, and move it into the project. References on how to do this found [here](https://www.youtube.com/watch?v=yylnC3dr_no&t=67s)
 5. Run application.py
-6. Run *home.html* located in */website/home.html
+6. Run *index.html* located in */website/index.html
 
 Note: If the last web-scrape of the chosen store was over a week ago, then the app will automatically initiate a web-scrape. This scrape might cause response times to increase significantly (up to 10 minutes for a full scrape based on current parameters)
 
