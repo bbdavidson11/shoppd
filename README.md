@@ -15,6 +15,8 @@ The following dependences are in no way comprehensive, and may be subjected to c
 pip install firebase firebase_admin numpy pandas flask-cors flask pillow torch requests beautifulsoup4 git+https://github.com/openai/CLIP.git
 ```
 
+You may also use pipreqs to download dependencies in the case this list is incomplete.
+
 ## How to Run
 If you would like to run this app locally, just do the following:
 
